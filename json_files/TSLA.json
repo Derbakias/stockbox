@@ -1,14 +1,14 @@
 {
   "Global Quote": {
       "01. symbol": "TSLA",
-      "02. open": "161.8350",
-      "03. high": "162.2150",
-      "04. low": "161.0300",
-      "05. price": "47.52",
-      "06. volume": "20485766",
+      "02. open": "481.79",
+      "03. high": "484.94",
+      "04. low": "473.70",
+      "05. price": "478.15",
+      "06. volume": "12,976,832",
       "07. latest trading day": "2020-01-09",
-      "08. previous close": "160.0900",
+      "08. previous close": "481.34",
       "09. change": "2.0000",
-      "10. change percent": "-2.06%"
+      "10. change percent": "-0.66%"
     }
 }

@@ -63,7 +63,7 @@ body {
   font-size: 10px;
 }
 
-.search {
+/* .search {
   display: flex;
   align-items: center;
 }
@@ -86,8 +86,7 @@ body {
 .search > input:focus {
   width: 100%;
   padding: 10px;
-}
-
+} */
 
 .time-box .date {
   font-size: 2.5rem;
@@ -99,9 +98,14 @@ body {
   background: #DE4666;
 }
 
-#chart {
+.chart-container {
   width: 75%;
-  background: white;
+  padding: 10px;
+  background:#f3f3f3;
+}
+
+#chart {
+  background: #eee;
 }
 
 .box-1 {
@@ -136,6 +140,7 @@ body {
   color: lightgrey;
   font-size: 2rem;
   font-weight: 100;
+  cursor: pointer;
 }
 
 .current-price {
@@ -143,12 +148,81 @@ body {
   letter-spacing: 2px;
 }
 
+.current-price > img {
+  width: 50px;
+  height: 50px;
+}
+
 .change.up {
-  color: blueviolet;
+  color: lightskyblue;
 }
 
 .change.down {
-  color: red;
+  color: darkred;
 }
 
+/* Media queries */
+@media (max-width: 1100px){
+  .time-box {
+    width: 100%;
+    height: 10%;
+  }
 
+  .time-box .settings {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    padding: 0;
+  }
+
+  .date {
+    display: flex;
+  }
+  
+  .date h5,
+  .date h2 {
+    margin: 0 10px;
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .chart-container {
+    width: 100%;
+    height: 90%;
+  }
+
+  .row-1 {
+    flex-direction: column;
+    height: 50vh;
+  }
+  
+  .row-2 {
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 50vh;
+  }
+
+  .box {
+    width: calc(100% / 2);
+    height: 50%;
+  }
+
+  .stock-name {
+    font-size: 1rem;
+  }
+  
+  .current-price {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 400px){
+  .date h5,
+  .date h2 {
+    font-size: 0.8rem;
+  }
+
+  .box {
+    font-size: 0.6rem;
+  }
+}

@@ -1,14 +1,14 @@
 {
   "Global Quote": {
       "01. symbol": "FB",
-      "02. open": "161.8350",
-      "03. high": "162.2150",
-      "04. low": "161.0300",
-      "05. price": "149.90",
-      "06. volume": "20485766",
+      "02. open": "219.20",
+      "03. high": "219.88",
+      "04. low": "217.42",
+      "05. price": "218.06",
+      "06. volume": "12,127,432",
       "07. latest trading day": "2020-01-09",
-      "08. previous close": "160.0900",
+      "08. previous close": "219.20",
       "09. change": "2.0000",
-      "10. change percent": "-7.23%"
+      "10. change percent": "-0.11%"
     }
 }
