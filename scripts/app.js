@@ -1,6 +1,6 @@
 // main variables
 const update = document.querySelector('.update');
-const search = document.querySelector('#search');
+const btn = document.querySelector('.slide-container');
 let dateHtml = document.querySelector('.date h5');
 let timeHtml = document.querySelector('.date h2');
 let chartContainer = document.querySelector(".chart-container");
@@ -12,8 +12,8 @@ const key = '&apikey=HBEG3YH190T4G4U4';
 
 // main event listeners
 update.addEventListener('click', makePromises);
-// search.addEventListener('keyup', searchCompany);
 boxContainer.addEventListener('click', displayData);
+btn.addEventListener('click', switchChart);
 
 // set the time with an interval
 timeHtml.textContent = '';
@@ -63,24 +63,44 @@ function setData(data, item){
   box.innerHTML = template;
 }
 
+// intialise active symbol variable
+let activeSymbol = 'MSFT';
+// display the data
 function displayData(e) {
   if(e.target.classList.contains('stock-name')){
-    const symbol = e.target.textContent;
-    chartContainer.innerHTML = '<div id="chart"></div>';
-    getHistData(symbol);
+    activeSymbol = e.target.textContent;
+    getHistData(activeSymbol);
   }
 }
 
 // fetch historical data 
-function getHistData(src) {
-  getData(`hist_data/${src}.json`)
+function getHistData(activeSymbol) {
+  chartContainer.innerHTML = '<div id="chart"></div>';
+  getData(`hist_data/${activeSymbol}.json`)
     .then(value => createChart(value))
     .catch(err => console.log(err));
 }
 
+function switchChart(e) {
+  if(e.target.id === 'label'){
+    if(!e.target.previousElementSibling.checked){
+      activeChart = 'candle';
+      getHistData(activeSymbol);
+    } else {
+      activeChart = 'line';
+      getHistData(activeSymbol);
+    }
+  return activeChart;
+  }
+}
+
+let activeChart = 'line';
 // create chart and add the data from api
 function createChart(value) {
+  let options;
+  let dataset = [];
   let price = [];
+  let priceRange = [];
   let volume = [];
   let dates = [];
     for (const key of Object.keys(value["Time Series (Daily)"])) {
@@ -90,63 +110,93 @@ function createChart(value) {
       let close = parseFloat(value["Time Series (Daily)"][key]["4. close"]);
       let vol = parseFloat(value["Time Series (Daily)"][key]["5. volume"]);
       let time = new Date(key);
+      series = [time.getTime(), open, high, low, close]
+      dataset.push(series);
       price.push(close);
       volume.push(vol);
       dates.push(time.getTime());
+      priceRange.push(high, low);
     }
   // chart options
-  let options = {
-    series: [{
-      name: 'Price',
-      type: 'line',
-      data: price
-    }, {
-      name: 'Volume',
-      type: 'bar',
-      data: volume
-    }],
-    chart: {
-      height: '95%',
-      type: 'line',
-      foreColor: '#984f7A',
-    },
-    plotOptions: {
-      bar: {
-          columnWidth: '20%',
+  if(activeChart === 'line'){
+    options = {
+      series: [{
+        name: 'Price',
+        type: 'line',
+        data: price
+      }, {
+        name: 'Volume',
+        type: 'bar',
+        data: volume
+      }],
+      chart: {
+        height: '95%',
+        type: 'line',
+        foreColor: '#984f7A',
       },
-    },
-    stroke: {
-      width: [2, 0]
-    },
-    title: {
-      text: value["Meta Data"]["2. Symbol"],
-      align: 'left',
-    },
-
-    labels: dates
-    ,
-    xaxis: {
-      type: 'datetime'
-    },
-    yaxis: [{
+      plotOptions: {
+        bar: {
+            columnWidth: '20%',
+        },
+      },
+      stroke: {
+        width: [2, 0]
+      },
       title: {
-        text: 'Price',
+        text: value["Meta Data"]["2. Symbol"],
+        align: 'left',
       },
-      decimalsInFloat: 2,
-      min: Math.min.apply(null ,price),
-      max: Math.max.apply(null, price),
-    }, {
-      opposite: true,
-      title: {
-        text: 'Volume'
+    
+      labels: dates
+      ,
+      xaxis: {
+        type: 'datetime'
       },
-      decimalsInFloat: 0
-    }]
-  };
+      yaxis: [{
+        title: {
+          text: 'Price',
+        },
+        decimalsInFloat: 2,
+        min: Math.min.apply(null ,price),
+        max: Math.max.apply(null, price),
+      }, {
+        opposite: true,
+        title: {
+          text: 'Volume'
+        },
+        decimalsInFloat: 0
+      }]
+    };
+  } else {
+    options = {
+          series: [{
+            data: dataset.sort(function(a, b){return a[0] - b[0]})
 
+          }],
+          chart: {
+            type: 'candlestick',
+            height: '95%',
+            foreColor: '#984f7A',
+          },
+          title: {
+            text: value["Meta Data"]["2. Symbol"],
+            align: 'left'
+          },
+          xaxis: {
+            type: 'datetime'
+          },
+          yaxis: {
+            tooltip: {
+              enabled: true
+            },
+            decimalsInFloat: 2,
+            min: Math.min.apply(null , priceRange),
+            max: Math.max.apply(null, priceRange),
+          }
+        };
+  }
   let chart = new ApexCharts(document.querySelector("#chart"), options);
   chart.render();
-  
 }
 
 // initialise chart
