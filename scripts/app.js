@@ -200,4 +200,4 @@ function createChart(value) {
 }
 
 // initialise chart
-getHistData('MSFT');
+setTimeout(() => getHistData('MSFT'), 2200);

@@ -52,6 +52,19 @@ body {
   cursor: pointer;
 }
 
+.chart-container .chart-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.chart-container .chart-spinner img {
+  width: 50px;
+  height: 50px;
+}
+
 .slide-container {
   position: relative;
   width: 30px;
